@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="jumbotron">
+  <h1 class="display-4">{{movie.title}}</h1>
+  <p class="lead">
+    관객수 : {{movie.audience}}
+  </p>
+  <p>
+    장르 : {{movie.genre.name}}
+  </p>
+  <hr>
+  <p>
+    {{movie.description}}
+  </p>
+  </p>
+  <div class="d-flex justify-content-center">
+    <img src="{{movie.poster_url}}" width="300px">
+  </div>
+  <hr class="my-4">
+
+  <p>
+    좋아요: {{movie.like_users.all.count}}
+  </p>
+
+  <p>
+    {% if user in movie.like_users.all %}
+    <a href="{% url 'movies:like' movie.id %}">좋아요 취소</a>
+    {% else %}
+    <a href="{% url 'movies:like' movie.id %}">좋아요</a>
+    {% endif %}
+  </p>
+  <hr>
+
+  {% for review in movie.review_set.all %}
+  <div>
+    <p>
+      한줄평:{{review.content}}
+    </p>
+    <p>
+      평점:{{review.score}}
+    </p>
+    <hr>
+    {% if user == review.user %}
+    <form action="{% url 'movies:review_delete' movie.id review.id %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="삭제">
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <form action="{% url 'movies:review' movie.id %}" method="POST">
+    {% csrf_token %}
+    {{review_form}}
+    <input type="submit">
+  </form>
+</div>
+
+{% endblock %}

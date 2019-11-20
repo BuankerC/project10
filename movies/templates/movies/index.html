@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="d-flex flex-row flex-wrap">
+  {% for movie in movies %}
+  <div class="card col-3 m-3" style="width: 18rem;">
+    <a href="{% url 'movies:detail' movie.id %}">
+      <img src="{{movie.poster_url}}" class="card-img-top"></a>
+    <div class="card-body">
+      <h5 class="card-title">{{movie.title}}</h5>
+      <p class="card-text">관객수:{{movie.audience}}명</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
